@@ -29,7 +29,7 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 		return 0, "", 0, fmt.Errorf("Неверный формат количества шагов: %w", err)
 	}
 	if steps <= 0 {
-		return 0, "", 0, errors.New("количество шагов не может быть отрицательным")
+		return 0, "", 0, errors.New("Количество шагов не может быть <= 0!")
 	}
 
 	activity := strings.TrimSpace(newData[1])
@@ -80,10 +80,10 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	var calories float64
 
 	switch strings.ToLower(activity) {
-	case "Ходьба":
-		calories = WalkingSpentCalories(steps, weight, height, duration)
-	case "Бег":
-		calories = RunningSpentCalories(steps, weight, height, duration)
+	case "ходьба":
+		calories, err = WalkingSpentCalories(steps, weight, height, duration)
+	case "бег":
+		calories, err = RunningSpentCalories(steps, weight, height, duration)
 	default:
 		return "", fmt.Errorf("неизвестный тип тренировки: %s", activity)
 	}
@@ -93,7 +93,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	}
 
 	result := fmt.Sprintf(
-		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",
+		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
 		activity,
 		durationHours,
 		dist,
